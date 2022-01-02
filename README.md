@@ -1,8 +1,33 @@
 # JMailer
 JMailer is a simple library for sending emails over SMTP. It uses the Java mail library, and features support for email attachments.
 
-## Build.
+## Build
 * `$ git clone https://github.com/UmarAbdul01/JMailer.git`
 * `$ cd JMailer`
-* `$ ant`
-* Check src/App.java for a simple demo.
+* `$ ant jar`
+
+## Simple demo
+```java
+
+// Import
+import com.umarabdul.jmailer.*;
+
+// Create a JMailer instance to the given SMTP server.
+JMailer mailer = new JMailer("smtp.gmail.com", 465);
+// Define sender's email and password.
+mailer.setSender("someuser@somesite.testing", "somestrongpassword");
+if (!(mailer.authenticate())) // Invalid email or password?
+  throw new JMailerError("Authentication failed!");
+// Add recipients (more than one is supported).
+mailer.addRecipient("rcpt1@somesite.testing");
+mailer.addRecipient("rcpt2@somesite.testing");
+// Set the subject of the email.
+mailer.setSubject("This is a test email");
+// Set the email body.
+mailer.setBody("Hello fellas, this is just a test email, so please ignore :)");
+// Attach a file.
+mailer.setAttachFile(new File("/some/file.pdf"), "Test_file.pdf");
+// Send the email.
+mailer.send();
+
+```
