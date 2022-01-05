@@ -14,6 +14,8 @@ import com.umarabdul.jmailer.*;
 
 // Create a JMailer instance to the given SMTP server.
 JMailer mailer = new JMailer("smtp.gmail.com", 465);
+// Set timeout to 2 seconds.
+mailer.setTimeout(2000);
 // Define sender's email and password.
 mailer.setSender("someuser@somesite.testing", "somestrongpassword");
 if (!(mailer.authenticate())) // Invalid email or password?
