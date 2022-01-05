@@ -192,8 +192,8 @@ public class JMailer {
     if (attachFile != null){
       try{
         attachment = new MimeBodyPart();
-        attachment.setFileName(attachFileAs);
         attachment.attachFile(attachFile);
+        attachment.setFileName(attachFileAs);
         multipart.addBodyPart(attachment);
       }catch(Exception e){
         throw new JMailerError("Error attaching file: " + e.getMessage());
