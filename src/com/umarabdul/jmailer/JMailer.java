@@ -17,6 +17,7 @@ public class JMailer {
   private String smtpHost;
   private int smtpPort;
   private boolean useSSL;
+  private int timeout;
   private String senderAddr;
   private String senderPassword;
   private ArrayList<String> recipientAddrs;
@@ -34,7 +35,8 @@ public class JMailer {
 
     this.smtpHost = smtpHost;
     this.smtpPort = smtpPort;
-    useSSL = true;
+    useSSL = true; // Use SSL by default.
+    timeout = 5000; // Set default timeout to 5 seconds.
     senderAddr = null;
     senderPassword = null;
     recipientAddrs = new ArrayList<String>();
@@ -44,12 +46,22 @@ public class JMailer {
     attachFileAs = null;
   }
 
+
+  /**
+   * Set the timeout of the network connection.
+   * @param timeout Network timeout, in milliseconds.
+   */
+  public void setTimeout(int timeout){
+    this.timeout = timeout;
+  }
+
   /**
    * Set the email address and password of the email sender.
    * @param senderAddr The email address of the sender.
    * @param senderPassword The password of the sender.
    */
   public void setSender(String senderAddr, String senderPassword){
+
     this.senderAddr = senderAddr;
     this.senderPassword = senderPassword;
   }
@@ -59,6 +71,7 @@ public class JMailer {
    * @param recipientAddr The address of the recipient.
    */
   public void addRecipient(String recipientAddr){
+
     if (!(recipientAddrs.contains(recipientAddr)))
       recipientAddrs.add(recipientAddr);
   }
@@ -85,6 +98,7 @@ public class JMailer {
    * @param attachFileAs The name to attach the file with.
    */
   public void setAttachFile(File attachFile, String attachFileAs){
+
     this.attachFile = attachFile;
     this.attachFileAs = attachFileAs;
   }
@@ -101,13 +115,15 @@ public class JMailer {
    * Create a {@link Session} object containing the SMTP and sender's config.
    * @return An instance of {@link Session}
    */
-  public Session createSession(){
+  private Session createSession(){
 
     Properties props = System.getProperties();
     props.put("mail.smtp.host", smtpHost);
     props.put("mail.smtp.port", String.valueOf(smtpPort));
     props.put("mail.smtp.ssl.enable", String.valueOf(useSSL));
     props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.timeout", String.valueOf(timeout));
+    props.put("mail.smtp.connectiontimeout", String.valueOf(timeout));
     Session session = Session.getInstance(props, new javax.mail.Authenticator(){
       protected PasswordAuthentication getPasswordAuthentication(){
         return new PasswordAuthentication(senderAddr, senderPassword);
