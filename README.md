@@ -10,8 +10,7 @@ JMailer is a simple library for sending emails over SMTP. It uses the Java mail 
 
 ## Todo
 
-* [X] Add support for multiple file attachments in an email
-
+* [X] Add support for multiple file attachments.
 
 ## Simple demo
 
