@@ -145,6 +145,7 @@ public class JMailer {
       sess.getTransport("smtp").connect();
       return true;
     }catch(Exception e){
+      e.printStackTrace();
       return false;
     }
   }
