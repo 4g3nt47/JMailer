@@ -23,8 +23,7 @@ public class JMailer {
   private ArrayList<String> recipientAddrs;
   private String subject;
   private String body;
-  private File attachFile;
-  private String attachFileAs;
+  private ArrayList<MimeBodyPart> attachments;
 
   /**
    * JMailer's constructor.
@@ -42,8 +41,7 @@ public class JMailer {
     recipientAddrs = new ArrayList<String>();
     subject = null;
     body = null;
-    attachFile = null;
-    attachFileAs = null;
+    attachments = new ArrayList<MimeBodyPart>();
   }
 
 
@@ -93,14 +91,22 @@ public class JMailer {
   }
 
   /**
-   * Define a file to attach to the email.
+   * Add a file to attach to the email.
    * @param attachFile The file to attach.
    * @param attachFileAs The name to attach the file with.
+   * @return true on success.
    */
-  public void setAttachFile(File attachFile, String attachFileAs){
-
-    this.attachFile = attachFile;
-    this.attachFileAs = attachFileAs;
+  public boolean setAttachFile(File attachFile, String attachFileAs){
+    
+    try{
+      MimeBodyPart attachment = new MimeBodyPart();
+      attachment.attachFile(attachFile);
+      attachment.setFileName(attachFileAs);
+      attachments.add(attachment);
+      return true;
+    }catch(Exception e){
+      return false;
+    }
   }
 
   /**
@@ -184,19 +190,15 @@ public class JMailer {
         emailBody.setText(body);   
         multipart.addBodyPart(emailBody);
       }catch(Exception e){
-        throw new JMailerError("Error setting email body: " + e.getMessage());
+        throw new JMailerError(String.format("Error setting email body: %s: %s", e.getClass().getName(), e.getMessage()));
       }
     }
-    // Add email attachment.
-    MimeBodyPart attachment = null;
-    if (attachFile != null){
+    // Add email attachments.
+    for (MimeBodyPart attachment : attachments){
       try{
-        attachment = new MimeBodyPart();
-        attachment.attachFile(attachFile);
-        attachment.setFileName(attachFileAs);
         multipart.addBodyPart(attachment);
       }catch(Exception e){
-        throw new JMailerError("Error attaching file: " + e.getMessage());
+        throw new JMailerError(String.format("Error attaching file: %s: %s", e.getClass().getName(), e.getMessage()));
       }
     }
     // Send it.
@@ -204,7 +206,7 @@ public class JMailer {
       message.setContent(multipart);
       Transport.send(message);      
     }catch(Exception e){
-      throw new JMailerError("Error sending email: " + e.getMessage());
+      throw new JMailerError(String.format("Error sending email: %s: %s", e.getClass().getName(), e.getMessage()));
     }
     return true;
   }
