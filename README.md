@@ -4,7 +4,7 @@ JMailer is a simple library for sending emails over SMTP. It uses the Java mail 
 
 ## Build
 
-* `$ git clone https://github.com/UmarAbdul01/JMailer.git`
+* `$ git clone https://github.com/4g3nt47/JMailer.git`
 * `$ cd JMailer`
 * `$ ant fat-jar`
 * `$ cp jmailer.jar /your/class/path`
