@@ -1,6 +1,6 @@
 # JMailer
 
-JMailer is a simple library for sending emails over SMTP. It uses the Java mail library, and features support for email attachments.
+JMailer is a simple library for sending emails over SMTP. It uses the Java mail library, and features support for (multiple) email attachments.
 
 ## Build
 
